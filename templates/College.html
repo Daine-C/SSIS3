@@ -1,0 +1,29 @@
+{% extends 'SSIS.html' %}
+
+{% block head %}
+<div class="content">
+    <h2>Colleges</h2>
+
+    <table>
+        <tr>
+            <th>College Code</th>
+            <th>College Name</th>
+        </tr>
+        {% for colg in colgs %}
+            <tr>
+                <td>{{ colg.content }}</td>
+                <td>
+                    <a href="">Delete</a>
+                    <br>
+                    <a href="">Update</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <form action="/" method="POST">
+        <input type="text" name="id" id="id">
+        <input type="text" name="name" id="name">
+        <input type="submit" id="Add Name">
+    </form>
+</div>
+{% endblock %}

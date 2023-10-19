@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>SSIS ver. 3</title>
+</head>
+<body>
+    <h1>Simple Student Information System</h1>
+    <table>
+        <tr>
+            <th>
+                <a href="">Colleges</a>
+            </th>
+            <th>
+                <a href="">Courses</a>
+            </th>
+            <th>
+                <a href="">Students</a>
+            </th>
+        </tr>
+    </table>
+    <p>________________________________</p>    
+    {% block head %}{% endblock %}
+</body>
+</html>
