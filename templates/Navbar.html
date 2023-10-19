@@ -3,13 +3,19 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for('college') }}">Colleges</a>
+            <a class="btn btn-primary ms-1" href="{{ url_for('college') }}" role="button">Colleges</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for('course') }}">Courses</a>
+            <a class="btn btn-primary ms-1" href="{{ url_for('course') }}" role="button">Courses</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ url_for('student') }}">Students</a>
+            <a class="btn btn-primary ms-1 me-1" href="{{ url_for('student') }}" role="button">Students</a>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Launch demo modal
+            </button>
+            {% include 'OverlayAdd.html' %}
           </li>
         </ul>
         <form class="d-flex" role="search">
