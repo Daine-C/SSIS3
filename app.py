@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -150,6 +150,23 @@ def addCL():
         form.name.data = ''
         flash("College Added Successfully!")
     return render_template("AddCL.html", id=id, name=name, form=form) 
+
+@app.route('/colleges/update/<string:id>', methods=['GET', 'POST'])
+def updateCL(id):
+    form = AddClForm()
+    name_to_update = Colleges.query.get_or_404(id)
+    if request.method == "POST":
+        name_to_update.id = request.form['id']
+        name_to_update.name = request.form['name']
+        try:
+            db.session.commit()
+            flash("College Updated Successfully!")
+            return render_template("UpdateCL.html", form=form, name_to_update=name_to_update)
+        except:
+            flash("Error! Looks like there was a problem... TwT")
+            return render_template("UpdateCL.html", form=form, name_to_update=name_to_update)
+    else:
+        return render_template("UpdateCL.html", form=form, name_to_update=name_to_update)
 
 if __name__ == "__main__":
     app.run(debug=True)
