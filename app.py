@@ -1,7 +1,9 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, request
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, SelectField
+from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from ssisforms import ClForm
 
 
 app = Flask(__name__)
@@ -44,6 +46,25 @@ class Students(db.Model):
 
     def __repr__(self):
         return '<Student %r>' % self.id
+    
+class SearchForm(FlaskForm):
+	searched = StringField("Searched", validators=[DataRequired()])
+	submit = SubmitField("Submit")
+
+class ClForm(FlaskForm):
+    id = StringField("Enter College Code", validators=[DataRequired()])
+    name = StringField("Enter College Name", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+class CrForm(FlaskForm):
+    id = StringField("Enter information", validators=[DataRequired()])
+    name = StringField("Enter information", validators=[DataRequired()])
+    language = SelectField('Colleges', choices=[('CCS', 'CEBA'), ('CASS', 'CSM'), ('text', 'Plain Text')])
+    submit = SubmitField("Submit")
+
+class StForm(FlaskForm):
+    info = StringField("Enter information", validators=[DataRequired()])
+    submit = SubmitField("Submit")
     
 with app.app_context():
     db.create_all()
@@ -161,6 +182,63 @@ def deleteCL(id):
     id = None
     name = None
     form = ClForm()
+
+    try:
+        db.session.delete(name_to_delete)
+        db.session.commit()
+        flash("College Deleted Successfully!")
+        return render_template("Deleted.html", id=id, name=name, form=form) 
+    except:
+        flash("Error! Looks like there was a problem... TwT")
+        return render_template("Deleted.html", id=id, name=name, form=form,) 
+
+@app.route('/courses/add/', methods=['GET', 'POST'])
+def addCR():
+    id = None
+    name = None
+
+    form = CrForm()
+
+    if form.validate_on_submit():
+        cors=Courses.query.filter_by(name=form.name.data).first()
+        if cors is None:
+            try:
+                cour = Courses(id = form.id.data, name = form.name.data)
+                db.session.add(coll)
+                db.session.commit()
+                flash("Course Added Successfully!")
+            except:
+                flash("That Course Code is already in use!")
+        id = form.id.data
+        form.id.data = ''
+        name = form.name.data
+        form.name.data = ''
+        flash("Add a another Course")        
+    return render_template("AddCR.html", id=id, name=name, form=form) 
+
+@app.route('/courses/update/<string:id>', methods=['GET', 'POST'])
+def updateCR(id):
+    form = CrForm()
+    name_to_update = Courses.query.get_or_404(id)
+    if request.method == "POST":
+        name_to_update.id = request.form['id']
+        name_to_update.name = request.form['name']
+        try:
+            db.session.commit()
+            flash("College Updated Successfully!")
+            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+        except:
+            flash("Error! Looks like there was a problem... TwT")
+            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+    else:
+        return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+    
+@app.route('/courses/deleted/<string:id>', methods=['GET', 'POST'])
+def deleteCR(id):
+    name_to_delete = Courses.query.get_or_404(id)
+    id = None
+    name = None
+    form = CrForm()
 
     try:
         db.session.delete(name_to_delete)
