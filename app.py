@@ -61,12 +61,12 @@ class CrForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class StForm(FlaskForm):
-    id = StringField("Enter ID Number", validators=[DataRequired(), Length(min=9, max=9)])
-    fname = StringField("Enter First Name", validators=[DataRequired()])
-    lname = StringField("Enter Last Name", validators=[DataRequired()])
-    yr = StringField("Enter Year Level", validators=[DataRequired()])
+    id = StringField("Enter ID Number", validators=[DataRequired()])
+    firstname = StringField("Enter First Name", validators=[DataRequired()])
+    lastname = StringField("Enter Last Name", validators=[DataRequired()])
+    year = StringField("Enter Year Level", validators=[DataRequired()])
     gender = StringField("Enter Gender", validators=[DataRequired()])
-    cour = StringField("Enter Course", validators=[DataRequired()])
+    course = StringField("Enter Course", validators=[DataRequired()])
     submit = SubmitField("Submit")
     
 with app.app_context():
@@ -79,20 +79,17 @@ def index():
 @app.route('/colleges/', methods=['GET', 'POST'])    
 def college():
     colgs = Colleges.query.order_by(Colleges.id).all()
-
     return render_template("College.html", colgs=colgs)
 
 @app.route('/courses/', methods=['GET', 'POST'])    
 def course():
     cours = Courses.query.order_by(Courses.id).all()
-
     return render_template("Courses.html", cours=cours)
 
 @app.route('/students/', methods=['GET', 'POST'])    
 def student():
-    stud = Students.query.order_by(Students.id).all()
-
-    return render_template("Students.html", stud=stud)       
+    studs = Students.query.order_by(Students.lastname).all()
+    return render_template("Students.html", studs=studs)       
 
 @app.route('/colleges/add/', methods=['GET', 'POST'])
 def addCL():
@@ -216,71 +213,76 @@ def addST():
     id = None
     fname = None
     lname = None
-    year = None
-    gender = None
-    cours = None
+    yr = None
+    gen = None
+    cour = None
     form = StForm()
 
     if form.validate_on_submit():
-        cors=Courses.query.filter_by(name=form.name.data).first()
-        if cors is None:
+        stud=Students.query.filter_by(firstname=form.firstname.data).first()
+        if stud is None:
             try:
-                cours = SelectField()
-                cors = Courses(id = form.id.data, fname = form.fname.data, lname=form.lname.data, 
-                                year = form.yr.data, gender = form.gender.data, cours = form.cour.data)
-                db.session.add(cors)
+                stud = Students(id = form.id.data, firstname = form.firstname.data, lastname = form.lastname.data, year = form.year.data, gender = form.gender.data, courseid = form.course.data)
+                db.session.add(stud)
                 db.session.commit()
                 flash("Student Added Successfully!")
             except:
                 flash("That ID Number is already in use!")
         id = form.id.data
         form.id.data = ''
-        fname = form.fname.data
-        form.fname.data = ''
-        lname = form.lname.data
-        form.lname.data = ''
-        year = form.yr.data
-        form.yr.data = ''
-        gender = form.gender.data
+        fname = form.firstname.data
+        form.firstname.data = ''
+        lname = form.lastname.data
+        form.lastname.data = ''
+        yr = form.year.data
+        form.year.data = ''
+        gen = form.gender.data
         form.gender.data = ''
-        cours = form.cours.data
-        form.cours.data = ''
+        cour = form.course.data
+        form.course.data = ''
         flash("Add a another Student")        
-    return render_template("AddST.html", id=id, fname=fname, lname=lname, year=year, gender=gender, cours=cours, form=form) 
+    return render_template("AddST.html", id=id, fname=fname, lname=lname, yr=yr, gen=gen, cour=cour, form=form) 
 
-@app.route('/courses/update/<string:id>', methods=['GET', 'POST'])
+@app.route('/students/update/<string:id>', methods=['GET', 'POST'])
 def updateST(id):
     form = StForm()
-    name_to_update = Courses.query.get_or_404(id)
+    name_to_update = Students.query.get_or_404(id)
     if request.method == "POST":
         name_to_update.id = request.form['id']
-        name_to_update.name = request.form['name']
-        name_to_update.collegeid = request.form['collg']
+        name_to_update.firstname = request.form['firstname']
+        name_to_update.lastname = request.form['lastname']
+        name_to_update.year = request.form['year']
+        name_to_update.gender = request.form['gender']
+        name_to_update.courseid = request.form['course']
         try:
             db.session.commit()
-            flash("Course Updated Successfully!")
-            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+            flash("Student Updated Successfully!")
+            return render_template("UpdateST.html", form=form, name_to_update=name_to_update)
         except:
             flash("Error! Looks like there was a problem... TwT")
-            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+            return render_template("UpdateST.html", form=form, name_to_update=name_to_update)
     else:
-        return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+        return render_template("UpdateST.html", form=form, name_to_update=name_to_update)
     
 @app.route('/courses/deleted/<string:id>', methods=['GET', 'POST'])
 def deleteST(id):
     name_to_delete = Courses.query.get_or_404(id)
     id = None
-    name = None
+    fname = None
+    lname = None
+    yr = None
+    gen = None
+    cour = None
     form = StForm()
 
     try:
         db.session.delete(name_to_delete)
         db.session.commit()
-        flash("College Deleted Successfully!")
-        return render_template("Deleted.html", id=id, name=name, form=form) 
+        flash("Student Deleted Successfully!")
+        return render_template("Delete.html", id=id, fname=fname, lname=lname, yr=yr, gen=gen, cour=cour, form=form)
     except:
         flash("Error! Looks like there was a problem... TwT")
-        return render_template("Deleted.html", id=id, name=name, form=form,)  
+        return render_template("Delete.html", id=id, fname=fname, lname=lname, yr=yr, gen=gen, cour=cour, form=form)
 
 if __name__ == "__main__":
     app.run(debug=True)
