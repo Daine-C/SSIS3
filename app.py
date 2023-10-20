@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from flask_migrate import Migrate
+from ssisforms import ClForm
+
 
 app = Flask(__name__)
 
@@ -10,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/SSIS'
 app.config['SECRET_KEY'] = 'secret'
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Colleges(db.Model):
     __tablename__ = "Colleges"
@@ -46,24 +47,6 @@ class Students(db.Model):
     
 with app.app_context():
     db.create_all()
-
-class AddForm(FlaskForm):
-    info = StringField("Enter information", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-class AddClForm(FlaskForm):
-    id = StringField("Enter College Code", validators=[DataRequired()])
-    name = StringField("Enter College Name", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-class AddCrForm(FlaskForm):
-    id = StringField("Enter information", validators=[DataRequired()])
-    name = StringField("Enter information", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-class AddStForm(FlaskForm):
-    info = StringField("Enter information", validators=[DataRequired()])
-    submit = SubmitField("Submit")
 
 @app.route('/')
 def index():
@@ -136,7 +119,7 @@ def student():
 def addCL():
     id = None
     name = None
-    form = AddClForm()
+    form = ClForm()
 
     if form.validate_on_submit():
         colgs=Colleges.query.filter_by(name=form.name.data).first()
@@ -153,7 +136,7 @@ def addCL():
 
 @app.route('/colleges/update/<string:id>', methods=['GET', 'POST'])
 def updateCL(id):
-    form = AddClForm()
+    form = ClForm()
     name_to_update = Colleges.query.get_or_404(id)
     if request.method == "POST":
         name_to_update.id = request.form['id']
@@ -167,6 +150,22 @@ def updateCL(id):
             return render_template("UpdateCL.html", form=form, name_to_update=name_to_update)
     else:
         return render_template("UpdateCL.html", form=form, name_to_update=name_to_update)
+    
+@app.route('/colleges/deleted/<string:id>', methods=['GET', 'POST'])
+def deleteCL(id):
+    name_to_delete = Colleges.query.get_or_404(id)
+    id = None
+    name = None
+    form = ClForm()
+
+    try:
+        db.session.delete(name_to_delete)
+        db.session.commit()
+        flash("College Deleted Successfully!")
+        return render_template("Deleted.html", id=id, name=name, form=form) 
+    except:
+        flash("Error! Looks like there was a problem... TwT")
+        return render_template("Deleted.html", id=id, name=name, form=form,) 
 
 if __name__ == "__main__":
     app.run(debug=True)
