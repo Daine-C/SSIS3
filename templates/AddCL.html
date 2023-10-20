@@ -1,0 +1,17 @@
+{% extends 'SSIS.html' %}
+
+{% block head %}
+<div class="content mb-2">
+<h1>Add College</h1>
+{{ form.hidden_tag() }}
+{{ form.id.label(class="form-label") }}
+{{ form.id.label(class="form-control") }}
+<br/>
+{{ form.hidden_tag() }}
+{{ form.name.label(class="form-label") }}
+{{ form.name.label(class="form-control") }}
+<br/>
+
+</div>
+<a type="button" class="btn btn-danger" href="{{ url_for('college') }}">Return</a>
+{% endblock %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -57,7 +57,8 @@ class AddClForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class AddCrForm(FlaskForm):
-    info = StringField("Enter information", validators=[DataRequired()])
+    id = StringField("Enter information", validators=[DataRequired()])
+    name = StringField("Enter information", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 class AddStForm(FlaskForm):
@@ -70,24 +71,9 @@ def index():
 
 @app.route('/colleges/', methods=['GET', 'POST'])    
 def college():
-    if request.method == 'POST':
-        college_id = request.form['id']
-        college_name = request.form['name']
-        new_college = Colleges(id=college_id)
-        name_college = Colleges(name=college_name)
+    colgs = Colleges.query.order_by(Colleges.id).all()
 
-        try:
-            db.session.add(new_college)
-            db.session.add(name_college)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'Error :('
-        
-    else:
-        colgs = Colleges.query.order_by(Colleges.id).all()
-
-        return render_template("College.html", colgs=colgs)
+    return render_template("College.html", colgs=colgs)
 
 @app.route('/courses/', methods=['GET', 'POST'])    
 def course():
@@ -153,12 +139,17 @@ def addCL():
     form = AddClForm()
 
     if form.validate_on_submit():
+        colgs=Colleges.query.filter_by(name=form.name.data).first()
+        if colgs is None:
+            coll = Colleges(id = form.id.data, name = form.name.data)
+            db.session.add(coll)
+            db.session.commit()
         id = form.id.data
         form.id.data = ''
         name = form.name.data
         form.name.data = ''
-
-    return render_template("Colleges.html", id=id, name=name, form=form) 
+        flash("College Added Successfully!")
+    return render_template("AddCL.html", id=id, name=name, form=form) 
 
 if __name__ == "__main__":
     app.run(debug=True)
