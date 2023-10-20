@@ -18,6 +18,7 @@ class Colleges(db.Model):
     __tablename__ = "Colleges"
     id = db.Column(db.String(10), primary_key = True, nullable = False)
     name = db.Column(db.String(200), nullable = False)
+    conn_course = db.relationship('Courses', cascade = "all,delete", backref = "courses")
 
     def __repr__(self):
         return '<College %r>' % self.id
@@ -27,8 +28,8 @@ class Courses(db.Model):
     id = db.Column(db.String(10), primary_key = True, nullable = False)
     name = db.Column(db.String(200), nullable = False)
     #College reference
-    collegeid = db.Column(db.String(10), db.ForeignKey(Colleges.id))
-    c_college = db.relationship(Colleges, cascade = "all,delete", backref = "courses")
+    collegeid = db.Column(db.String(10), db.ForeignKey('Colleges.id'))
+    conn_student = db.relationship('Students', cascade = "all,delete", backref = "students")
 
     def __repr__(self):
         return '<Course %r>' % self.id
@@ -41,8 +42,7 @@ class Students(db.Model):
     year = db.Column(db.Integer, nullable = False)
     gender = db.Column(db.String(200), nullable = False)
     #Course reference
-    courseid = db.Column(db.String(10), db.ForeignKey(Courses.id))
-    c_college = db.relationship(Courses, cascade = "all,delete", backref = "students")
+    courseid = db.Column(db.String(10), db.ForeignKey('Courses.id'))
 
     def __repr__(self):
         return '<Student %r>' % self.id
@@ -59,7 +59,7 @@ class ClForm(FlaskForm):
 class CrForm(FlaskForm):
     id = StringField("Enter information", validators=[DataRequired()])
     name = StringField("Enter information", validators=[DataRequired()])
-    language = SelectField('Colleges', choices=[('CCS', 'CEBA'), ('CASS', 'CSM'), ('text', 'Plain Text')])
+    collg = StringField("Enter information", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 class StForm(FlaskForm):
@@ -196,15 +196,15 @@ def deleteCL(id):
 def addCR():
     id = None
     name = None
-
+    collg = None
     form = CrForm()
 
     if form.validate_on_submit():
         cors=Courses.query.filter_by(name=form.name.data).first()
         if cors is None:
             try:
-                cour = Courses(id = form.id.data, name = form.name.data)
-                db.session.add(coll)
+                cors = Courses(id = form.id.data, name = form.name.data, collegeid = form.collg.data)
+                db.session.add(cors)
                 db.session.commit()
                 flash("Course Added Successfully!")
             except:
@@ -213,8 +213,10 @@ def addCR():
         form.id.data = ''
         name = form.name.data
         form.name.data = ''
+        collg = form.collg.data
+        form.collg.data = ''
         flash("Add a another Course")        
-    return render_template("AddCR.html", id=id, name=name, form=form) 
+    return render_template("AddCR.html", id=id, name=name, collg=collg, form=form) 
 
 @app.route('/courses/update/<string:id>', methods=['GET', 'POST'])
 def updateCR(id):
