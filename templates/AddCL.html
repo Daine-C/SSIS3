@@ -13,9 +13,9 @@
 {{ form.name.label(class="form-label") }}
 {{ form.name(class="form-control") }}
 <br/>
-{{ form.submit }}
+{{ form.submit(class="btn btn-success") }}
 <br/>
 </form>
 </div>
-<a type="button" class="btn btn-danger" href="{{ url_for('college') }}">Return</a>
+<a type="button" class="btn btn-danger" href="{{ url_for('college') }}">Cancel</a>
 {% endblock %}
