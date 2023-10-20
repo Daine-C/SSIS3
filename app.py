@@ -124,14 +124,18 @@ def addCL():
     if form.validate_on_submit():
         colgs=Colleges.query.filter_by(name=form.name.data).first()
         if colgs is None:
-            coll = Colleges(id = form.id.data, name = form.name.data)
-            db.session.add(coll)
-            db.session.commit()
+            try:
+                coll = Colleges(id = form.id.data, name = form.name.data)
+                db.session.add(coll)
+                db.session.commit()
+                flash("College Added Successfully!")
+            except:
+                flash("That College Code is already in use!")
         id = form.id.data
         form.id.data = ''
         name = form.name.data
         form.name.data = ''
-        flash("College Added Successfully!")
+        flash("Add a another College")        
     return render_template("AddCL.html", id=id, name=name, form=form) 
 
 @app.route('/colleges/update/<string:id>', methods=['GET', 'POST'])
