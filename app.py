@@ -3,7 +3,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
 
 app = Flask(__name__)
@@ -12,7 +11,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/SSIS'
 app.config['SECRET_KEY'] = 'secret'
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 class Colleges(db.Model):
     __tablename__ = "Colleges"
@@ -57,13 +55,18 @@ class ClForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class CrForm(FlaskForm):
-    id = StringField("Enter information", validators=[DataRequired()])
-    name = StringField("Enter information", validators=[DataRequired()])
-    collg = StringField("Enter information", validators=[DataRequired()])
+    id = StringField("Enter Course Code", validators=[DataRequired()])
+    name = StringField("Enter Course Name", validators=[DataRequired()])
+    collg = StringField("Enter College", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 class StForm(FlaskForm):
-    info = StringField("Enter information", validators=[DataRequired()])
+    id = StringField("Enter ID Number", validators=[DataRequired(), Length(min=9, max=9)])
+    fname = StringField("Enter First Name", validators=[DataRequired()])
+    lname = StringField("Enter Last Name", validators=[DataRequired()])
+    yr = StringField("Enter Year Level", validators=[DataRequired()])
+    gender = StringField("Enter Gender", validators=[DataRequired()])
+    cour = StringField("Enter Course", validators=[DataRequired()])
     submit = SubmitField("Submit")
     
 with app.app_context():
@@ -81,60 +84,15 @@ def college():
 
 @app.route('/courses/', methods=['GET', 'POST'])    
 def course():
-    if request.method == 'POST':
-        course_id = request.form['id']
-        course_name = request.form['name']
-        course_college = request.form['college_id']
-        new_course = Courses(id=course_id)
-        name_course = Courses(name=course_name)
-        conn_college = Courses(collegeid=course_college)
+    cours = Courses.query.order_by(Courses.id).all()
 
-        try:
-            db.session.add(new_course)
-            db.session.add(name_course)
-            db.session.add(conn_college)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'Error :('
-        
-    else:
-        cours = Courses.query.order_by(Courses.id).all()
-
-        return render_template("Courses.html", cours=cours)
+    return render_template("Courses.html", cours=cours)
 
 @app.route('/students/', methods=['GET', 'POST'])    
 def student():
-    if request.method == 'POST':
-        student_id = request.form['id']
-        student_fname = request.form['firstname']
-        student_lname = request.form['lastname']
-        student_year = request.form['year']
-        student_gender = request.form['gender']
-        student_course = request.form['course']
-        new_student = Students(id=student_id)
-        fname_student = Students(firstname=student_fname)
-        lname_student = Students(secondname=student_lname)
-        year_student = Students(year=student_year)
-        gender_student = Students(id=student_gender)
-        conn_student = Students(name=student_course)
+    stud = Students.query.order_by(Students.id).all()
 
-        try:
-            db.session.add(new_student)
-            db.session.add(fname_student)
-            db.session.add(lname_student)
-            db.session.add(year_student)
-            db.session.add(gender_student)
-            db.session.add(conn_student)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'Error :('
-        
-    else:
-        stud = Students.query.order_by(Students.id).all()
-
-        return render_template("Students.html", stud=stud)       
+    return render_template("Students.html", stud=stud)       
 
 @app.route('/colleges/add/', methods=['GET', 'POST'])
 def addCL():
@@ -251,7 +209,78 @@ def deleteCR(id):
         return render_template("Deleted.html", id=id, name=name, form=form) 
     except:
         flash("Error! Looks like there was a problem... TwT")
-        return render_template("Deleted.html", id=id, name=name, form=form,) 
+        return render_template("Deleted.html", id=id, name=name, form=form,)
+
+@app.route('/students/add/', methods=['GET', 'POST'])
+def addST():
+    id = None
+    fname = None
+    lname = None
+    year = None
+    gender = None
+    cours = None
+    form = StForm()
+
+    if form.validate_on_submit():
+        cors=Courses.query.filter_by(name=form.name.data).first()
+        if cors is None:
+            try:
+                cours = SelectField()
+                cors = Courses(id = form.id.data, fname = form.fname.data, lname=form.lname.data, 
+                                year = form.yr.data, gender = form.gender.data, cours = form.cour.data)
+                db.session.add(cors)
+                db.session.commit()
+                flash("Student Added Successfully!")
+            except:
+                flash("That ID Number is already in use!")
+        id = form.id.data
+        form.id.data = ''
+        fname = form.fname.data
+        form.fname.data = ''
+        lname = form.lname.data
+        form.lname.data = ''
+        year = form.yr.data
+        form.yr.data = ''
+        gender = form.gender.data
+        form.gender.data = ''
+        cours = form.cours.data
+        form.cours.data = ''
+        flash("Add a another Student")        
+    return render_template("AddST.html", id=id, fname=fname, lname=lname, year=year, gender=gender, cours=cours, form=form) 
+
+@app.route('/courses/update/<string:id>', methods=['GET', 'POST'])
+def updateST(id):
+    form = StForm()
+    name_to_update = Courses.query.get_or_404(id)
+    if request.method == "POST":
+        name_to_update.id = request.form['id']
+        name_to_update.name = request.form['name']
+        name_to_update.collegeid = request.form['collg']
+        try:
+            db.session.commit()
+            flash("Course Updated Successfully!")
+            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+        except:
+            flash("Error! Looks like there was a problem... TwT")
+            return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+    else:
+        return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
+    
+@app.route('/courses/deleted/<string:id>', methods=['GET', 'POST'])
+def deleteST(id):
+    name_to_delete = Courses.query.get_or_404(id)
+    id = None
+    name = None
+    form = StForm()
+
+    try:
+        db.session.delete(name_to_delete)
+        db.session.commit()
+        flash("College Deleted Successfully!")
+        return render_template("Deleted.html", id=id, name=name, form=form) 
+    except:
+        flash("Error! Looks like there was a problem... TwT")
+        return render_template("Deleted.html", id=id, name=name, form=form,)  
 
 if __name__ == "__main__":
     app.run(debug=True)

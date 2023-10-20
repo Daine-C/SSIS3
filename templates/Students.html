@@ -1,33 +1,43 @@
 {% extends 'SSIS.html' %}
 
 {% block head %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
 <div class="content">
-    <h2>Colleges</h2>
-
-    <table>
-        <tr>
-            <th>ID Number</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Course Code</th>
-            <th>Course Name</th>
-            <th>College</th>
-        </tr>
-        {% for colg in colgs %}
-            <tr>
-                <td>{{ colg.content }}</td>
-                <td>
-                    <a href="">Delete</a>
-                    <br>
-                    <a href="">Update</a>
-                </td>
+    <h2>Students</h2>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <table class="table table-hover table-bordered mt-2 align-middle align-middle">
+            <tr class="table-secondary">
+                <th>Student ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Year</th>
+                <th>Gender</th>
+                <th>Course</th>
+                <th>College</th>
+                <th></th>
             </tr>
-        {% endfor %}
-    </table>
-    <form action="/" method="POST">
-        <input type="text" name="id" id="id">
-        <input type="text" name="name" id="name">
-        <input type="submit" id="Add Name">
-    </form>
+            {% for stud in studs %}
+                <tr>
+                    <td>{{ stud.id }}</td>
+                    <td>{{ stud.firstname }}</td>
+                    <td>{{ stud.lastname }}</td>
+                    <td>{{ stud.courseid }}</td>
+                    <td>{{ stud.year }}</td>
+                    <td>{{ stud.gender }}</td>
+                    <td>
+                        <div class="d-grid gap-2 col-6">
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateST', id=stud.id)}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteST', id=stud.id)}}">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 {% endblock %}

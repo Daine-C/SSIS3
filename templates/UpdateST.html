@@ -9,36 +9,36 @@
     {% endfor %}
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
-            <h1>Add Student</h1>
+            <h1>Edit Student</h1>
             <form method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control") }}
+                {{ form.id(class="form-control", value=name_to_update.id) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.fname.label(class="form-label") }}
-                {{ form.fname(class="form-control") }}
+                {{ form.fname(class="form-control", value=name_to_update.fname) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.lname.label(class="form-label") }}
-                {{ form.lname(class="form-control") }}
+                {{ form.lname(class="form-control", value=name_to_update.lname) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.cour.label(class="form-label") }}
-                {{ form.cour(class="form-control") }}
+                {{ form.cour(class="form-control", value=name_to_update.cour) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.yr.label(class="form-label") }}
-                {{ form.yr(class="form-control") }}
+                {{ form.yr(class="form-control", value=name_to_update.yr) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
-                {{ form.gender(class="form-control") }}
+                {{ form.gender(class="form-control", value=name_to_update.gender) }}
                 <br/>
                 {{ form.submit(class="btn btn-success") }}
                 <br/>
