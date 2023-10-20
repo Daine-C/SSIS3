@@ -3,15 +3,19 @@
 {% block head %}
 <div class="content mb-2">
 <h1>Add College</h1>
+<form method ="POST">
 {{ form.hidden_tag() }}
 {{ form.id.label(class="form-label") }}
-{{ form.id.label(class="form-control") }}
+{{ form.id(class="form-control") }}
+<br/>
 <br/>
 {{ form.hidden_tag() }}
 {{ form.name.label(class="form-label") }}
-{{ form.name.label(class="form-control") }}
+{{ form.name(class="form-control") }}
 <br/>
-
+{{ form.submit }}
+<br/>
+</form>
 </div>
 <a type="button" class="btn btn-danger" href="{{ url_for('college') }}">Return</a>
 {% endblock %}
