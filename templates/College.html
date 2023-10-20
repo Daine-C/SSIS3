@@ -3,25 +3,25 @@
 {% block head %}
 <div class="content">
     <h2>Colleges</h2>
-
-    <table>
-        <tr>
-            <th>College Code</th>
-            <th>College Name</th>
-        </tr>
-    </table>
-    <table>
-        {% for colg in colgs %}
-            <tr>
-                <td>{{ colg.id }}</td>
-                <td>{{ colg.name }}</td>
-                <td>
-                    <a href="">Delete</a>
-                    <br>
-                    <a href="">Update</a>
-                </td>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <table class="table table-hover table-bordered mt-2 align-middle align-middle">
+            <tr class="table-secondary">
+                <th>College Code</th>
+                <th>College Name</th>
+                <th></th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for colg in colgs %}
+                <tr>
+                    <td>{{ colg.id }}</td>
+                    <td>{{ colg.name }}</td>
+                    <td>
+                        <a href="">Delete</a>
+                        <br>
+                        <a href="">Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 {% endblock %}
