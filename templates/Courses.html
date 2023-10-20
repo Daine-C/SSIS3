@@ -14,12 +14,14 @@
             <tr class="table-secondary">
                 <th>Course Code</th>
                 <th>Course Name</th>
+                <th>College</th>
                 <th></th>
             </tr>
             {% for cour in cours %}
                 <tr>
                     <td>{{ cour.id }}</td>
                     <td>{{ cour.name }}</td>
+                    <td>{{ cour.collegeid }}</td>
                     <td>
                         <div class="d-grid gap-2 col-6">
                             <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateCR', id=cour.id)}}">Update</a>

@@ -203,6 +203,7 @@ def addCR():
         cors=Courses.query.filter_by(name=form.name.data).first()
         if cors is None:
             try:
+                collg = SelectField()
                 cors = Courses(id = form.id.data, name = form.name.data, collegeid = form.collg.data)
                 db.session.add(cors)
                 db.session.commit()
@@ -225,9 +226,10 @@ def updateCR(id):
     if request.method == "POST":
         name_to_update.id = request.form['id']
         name_to_update.name = request.form['name']
+        name_to_update.collegeid = request.form['collg']
         try:
             db.session.commit()
-            flash("College Updated Successfully!")
+            flash("Course Updated Successfully!")
             return render_template("UpdateCR.html", form=form, name_to_update=name_to_update)
         except:
             flash("Error! Looks like there was a problem... TwT")
