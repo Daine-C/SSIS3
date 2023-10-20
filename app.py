@@ -1,9 +1,13 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/SSIS'
+app.config['SECRET_KEY'] = 'secret'
 
 db = SQLAlchemy(app)
 
@@ -43,11 +47,28 @@ class Students(db.Model):
 with app.app_context():
     db.create_all()
 
+class AddForm(FlaskForm):
+    info = StringField("Enter information", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+class AddClForm(FlaskForm):
+    id = StringField("Enter College Code", validators=[DataRequired()])
+    name = StringField("Enter College Name", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+class AddCrForm(FlaskForm):
+    info = StringField("Enter information", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+class AddStForm(FlaskForm):
+    info = StringField("Enter information", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 @app.route('/')
 def index():
-    return render_template('Home.html')
+    return render_template("Home.html")
 
-@app.route('/colleges/', methods=['POST', 'GET'])    
+@app.route('/colleges/', methods=['GET', 'POST'])    
 def college():
     if request.method == 'POST':
         college_id = request.form['id']
@@ -66,9 +87,9 @@ def college():
     else:
         colgs = Colleges.query.order_by(Colleges.id).all()
 
-        return render_template('College.html', colgs=colgs)
+        return render_template("College.html", colgs=colgs)
 
-@app.route('/courses/', methods=['POST', 'GET'])    
+@app.route('/courses/', methods=['GET', 'POST'])    
 def course():
     if request.method == 'POST':
         course_id = request.form['id']
@@ -90,9 +111,9 @@ def course():
     else:
         cours = Courses.query.order_by(Courses.id).all()
 
-        return render_template('Courses.html', cours=cours)
+        return render_template("Courses.html", cours=cours)
 
-@app.route('/students/', methods=['POST', 'GET'])    
+@app.route('/students/', methods=['GET', 'POST'])    
 def student():
     if request.method == 'POST':
         student_id = request.form['id']
@@ -123,7 +144,21 @@ def student():
     else:
         stud = Students.query.order_by(Students.id).all()
 
-        return render_template('Students.html', stud=stud)        
+        return render_template("Students.html", stud=stud)       
+
+@app.route('/colleges/add/', methods=['GET', 'POST'])
+def addCL():
+    id = None
+    name = None
+    form = AddClForm()
+
+    if form.validate_on_submit():
+        id = form.id.data
+        form.id.data = ''
+        name = form.name.data
+        form.name.data = ''
+
+    return render_template("Colleges.html", id=id, name=name, form=form) 
 
 if __name__ == "__main__":
     app.run(debug=True)
