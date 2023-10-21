@@ -1,0 +1,31 @@
+if form.validate_on_submit():
+        if typ=='cl':
+            results = Colleges.query
+            # Get data from submitted form
+            results.searched = form.searched.data
+            # Query the Database
+            results = results.filter(Colleges.content.like('%' + results.searched + '%'))
+            results = results.order_by(Colleges.id).all()
+
+        elif typ=='cr':
+            results = Courses.query
+            # Get data from submitted form
+            results.searched = form.searched.data
+            # Query the Database
+            results = results.filter(Courses.content.like('%' + results.searched + '%'))
+            results = results.order_by(Courses.id).all()
+        elif typ=='st':
+            results = Students.query
+            # Get data from submitted form
+            results.searched = form.searched.data
+            # Query the Database
+            results = results.filter(Students.content.like('%' + results.searched + '%'))
+            results = results.order_by(Students.id).all()
+        else:
+            results = Colleges.query.join(Courses).join(Students)
+            # Get data from submitted form
+            results.searched = form.searched.data
+            # Query the Database
+            results = results.filter(Colleges.content.like('%' + results.searched + '%'), Students.content.like('%' + results.searched + '%'), Students.content.like('%' + results.searched + '%'))
+            results = results.order_by(Students.id).all()   
+    return render_template("search.html", form=form, searched = results.searched, results = results)

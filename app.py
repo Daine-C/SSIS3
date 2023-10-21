@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_, and_, text
 
 
 app = Flask(__name__)
@@ -47,8 +48,9 @@ class Students(db.Model):
 
 #Forms    
 class SearchForm(FlaskForm):
-	searched = StringField("Searched", validators=[DataRequired()])
-	submit = SubmitField("Submit")
+    searched = StringField("Searched", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
 #College Form
 class ClForm(FlaskForm):
     id = StringField("Enter College Code", validators=[DataRequired()])
@@ -289,6 +291,26 @@ def deleteST(id):
     except:
         flash("Error! Looks like there was a problem... TwT")
         return render_template("Deleted.html", id=id, fname=fname, lname=lname, yr=yr, gen=gen, cour=cour, form=form)
+    
+@app.context_processor
+def base():
+	form = SearchForm()
+	return dict(form=form)
+
+#Search    
+@app.route('/search', methods=["POST"])
+def search():
+  form = SearchForm()
+  search = '%' + str(form.searched) + '%'
+  if form.validate_on_submit:
+    results = Colleges.query.join(Courses).join(Students)
+    results = results.filter(text('%' + search + '%'))
+  return render_template("Search.html", form=form, search=search, results=results)
+
+
+
+ 
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
