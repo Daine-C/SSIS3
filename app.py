@@ -326,7 +326,7 @@ def search():
 		 results = results) 
       elif typ == 'st':
         results = Students.query
-        results = results.filter(Students.name.like('%' + tag + '%'))
+        results = results.filter(Students.lastname.like('%' + tag + '%'))
         results = results.order_by(Students.id).all()
         return render_template("Search.html",
 		 form=form,

@@ -16,7 +16,12 @@
          {% for result in results %}
            <tr>
              <td>{{ result.id }}</td>
+             {% if result.name %}
              <td>{{ result.name }}</td>
+             {% else %}
+             <td>{{ result.firstname }}</td>
+             <td>{{ result.lastname }}</td>
+             {% endif %}
            </tr>
          {% endfor %}
         </tr>
