@@ -46,7 +46,13 @@ class Students(db.Model):
     def __repr__(self):
         return '<Student %r>' % self.id
 
-#Forms    
+#Search Form All    
+class SearchAllForm(FlaskForm):
+    searched = StringField("Searched", validators=[DataRequired()])
+    typs = SelectField(u'Fields', choices=[('cl', 'Colleges'),('cr', 'Courses'),('st', 'Students')])
+    submit = SubmitField("Submit")
+
+#Search Forms    
 class SearchForm(FlaskForm):
     searched = StringField("Searched", validators=[DataRequired()])
     submit = SubmitField("Submit")
@@ -294,23 +300,40 @@ def deleteST(id):
     
 @app.context_processor
 def base():
-	form = SearchForm()
+	form = SearchAllForm()
 	return dict(form=form)
 
 #Search    
 @app.route('/search', methods=["POST"])
 def search():
-  form = SearchForm()
-  search = '%' + str(form.searched) + '%'
+  form = SearchAllForm()
+  tag = request.form['searched']
+  typ = request.form['typs']
   if form.validate_on_submit:
-    results = Colleges.query.join(Courses).join(Students)
-    results = results.filter(text('%' + search + '%'))
-  return render_template("Search.html", form=form, search=search, results=results)
-
-
-
- 
-        
+      if typ == 'cl':
+        results = Colleges.query
+        results = results.filter(Colleges.name.like('%' + tag + '%'))
+        results = results.order_by(Colleges.id).all()
+        return render_template("Search.html",
+		 form=form,
+		 results = results) 
+      elif typ == 'cr':
+        results = Courses.query
+        results = results.filter(Courses.name.like('%' + tag + '%'))
+        results = results.order_by(Courses.id).all()
+        return render_template("Search.html",
+		 form=form,
+		 results = results) 
+      elif typ == 'st':
+        results = Students.query
+        results = results.filter(Students.name.like('%' + tag + '%'))
+        results = results.order_by(Students.id).all()
+        return render_template("Search.html",
+		 form=form,
+		 results = results) 
+      else:
+          return render_template('Search.html')
+      
 
 if __name__ == "__main__":
     app.run(debug=True)

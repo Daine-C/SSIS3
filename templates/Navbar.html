@@ -20,6 +20,7 @@
         </ul>
         <form class="d-flex" method="POST" action="{{ url_for('search')}}">
             {{ form.hidden_tag() }}
+            {{ form.typs(class="form-select mx-2")}}
             <input class="form-control me-2" type="search" aria-label="Search", name="searched">
             <button class="btn btn-outline-success me-5" type="submit">Search</button>
         </form>
