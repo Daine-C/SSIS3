@@ -121,7 +121,7 @@ def addCL():
         form.id.data = ''
         name = form.name.data
         form.name.data = ''
-        flash("Add a another College")        
+        flash("Add another College")        
     return render_template("AddCL.html", id=id, name=name, form=form) 
 #Edit
 @app.route('/colleges/update/<string:id>', methods=['GET', 'POST'])
@@ -183,7 +183,7 @@ def addCR():
         form.name.data = ''
         collg = form.collg.data
         form.collg.data = ''
-        flash("Add a another Course")        
+        flash("Add another Course")        
     return render_template("AddCR.html", id=id, name=name, collg=collg, form=form) 
 #Edit
 @app.route('/courses/update/<string:id>', methods=['GET', 'POST'])
@@ -254,7 +254,7 @@ def addST():
         form.gender.data = ''
         cour = form.course.data
         form.course.data = ''
-        flash("Add a another Student")        
+        flash("Add another Student")        
     return render_template("AddST.html", id=id, fname=fname, lname=lname, yr=yr, gen=gen, cour=cour, form=form) 
 #Edit
 @app.route('/students/update/<string:id>', methods=['GET', 'POST'])
