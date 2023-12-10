@@ -12,15 +12,19 @@
             <th>Code</th>
             <th>Name</th>
             <th></th>
+            <th></th>
         </tr>
          {% for result in results %}
            <tr>
-             <td>{{ result.id }}</td>
-             {% if result.name %}
-             <td>{{ result.name }}</td>
+             <td>{{ result[0] }}</td>
+             {% if result[3] %}
+             <td>{{ result[1] }}</td>
+             <td>{{ result[2] }}</td>
+             <td>{{ result[5] }}</td>
              {% else %}
-             <td>{{ result.firstname }}</td>
-             <td>{{ result.lastname }}</td>
+             <td>{{ result[1] }}</td>
+             <td>{{ result[2] }}</td>
+             <td></td>
              {% endif %}
            </tr>
          {% endfor %}

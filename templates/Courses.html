@@ -19,13 +19,13 @@
             </tr>
             {% for cour in cours %}
                 <tr>
-                    <td>{{ cour.id }}</td>
-                    <td>{{ cour.name }}</td>
-                    <td>{{ cour.collegeid }}</td>
+                    <td>{{ cour[0] }}</td>
+                    <td>{{ cour[1] }}</td>
+                    <td>{{ cour[2] }}</td>
                     <td>
                         <div class="d-grid gap-2 col-6">
-                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateCR', id=cour.id)}}">Update</a>
-                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteCR', id=cour.id)}}">Delete</a>
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateCR', id=cour[0])}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteCR', id=cour[0])}}">Delete</a>
                         </div>
                     </td>
                 </tr>

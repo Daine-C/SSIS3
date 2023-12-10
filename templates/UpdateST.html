@@ -10,35 +10,35 @@
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
             <h1>Edit Student</h1>
-            <form method ="POST">
+            <form action="/students/update/{{ uid }}" method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update.id) }}
+                {{ form.id(class="form-control", value=name_to_update[0]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.firstname.label(class="form-label") }}
-                {{ form.firstname(class="form-control", value=name_to_update.firstname) }}
+                {{ form.firstname(class="form-control", value=name_to_update[1]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.lastname.label(class="form-label") }}
-                {{ form.lastname(class="form-control", value=name_to_update.lastname) }}
+                {{ form.lastname(class="form-control", value=name_to_update[2]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.course.label(class="form-label") }}
-                {{ form.course(class="form-control", value=name_to_update.courseid) }}
+                {{ form.course(class="form-control", value=name_to_update[5]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.year.label(class="form-label") }}
-                {{ form.year(class="form-control", value=name_to_update.year) }}
+                {{ form.year(class="form-control", value=name_to_update[3]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
-                {{ form.gender(class="form-control", value=name_to_update.gender) }}
+                {{ form.gender(class="form-control", value=name_to_update[4]) }}
                 <br/>
                 {{ form.submit(class="btn btn-success") }}
                 <br/>

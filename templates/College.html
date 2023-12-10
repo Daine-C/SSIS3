@@ -18,12 +18,12 @@
             </tr>
             {% for colg in colgs %}
                 <tr>
-                    <td>{{ colg.id }}</td>
-                    <td>{{ colg.name }}</td>
+                    <td>{{ colg[0] }}</td>
+                    <td>{{ colg[1] }}</td>
                     <td>
                         <div class="d-grid gap-2 col-6">
-                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateCL', id=colg.id)}}">Update</a>
-                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteCL', id=colg.id)}}">Delete</a>
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateCL', id=colg[0])}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteCL', id=colg[0])}}">Delete</a>
                         </div>
                     </td>
                 </tr>

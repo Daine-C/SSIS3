@@ -10,7 +10,7 @@
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
             <h1>Edit Course</h1>
-            <form action="/courses/update/{{ name_to_update.id }}" method ="POST">
+            <form action="/courses/update/{{ uid }}" method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
                 {{ form.id(class="form-control", value=name_to_update.id) }}

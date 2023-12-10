@@ -22,16 +22,16 @@
             </tr>
             {% for stud in studs %}
                 <tr>
-                    <td>{{ stud.id }}</td>
-                    <td>{{ stud.firstname }}</td>
-                    <td>{{ stud.lastname }}</td>
-                    <td>{{ stud.courseid }}</td>
-                    <td>{{ stud.year }}</td>
-                    <td>{{ stud.gender }}</td>
+                    <td>{{ stud[0] }}</td>
+                    <td>{{ stud[1] }}</td>
+                    <td>{{ stud[2] }}</td>
+                    <td>{{ stud[5] }}</td>
+                    <td>{{ stud[3] }}</td>
+                    <td>{{ stud[4] }}</td>
                     <td>
                         <div class="d-grid gap-2 col-6">
-                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateST', id=stud.id)}}">Update</a>
-                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteST', id=stud.id)}}">Delete</a>
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateST', id=stud[0])}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteST', id=stud[0])}}">Delete</a>
                         </div>
                     </td>
                 </tr>
