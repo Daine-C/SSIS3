@@ -1,6 +1,6 @@
 {% extends 'SSIS.html' %}
 
-{% block head %}
+{% block body %}
     {% for message in get_flashed_messages() %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ message }}
@@ -13,22 +13,32 @@
             <form action="/courses/update/{{ uid }}" method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update.id) }}
+                {{ form.id(class="form-control", value=name_to_update[0], placeholder="e.g. BSCS, BSIS, BSIT") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control", value=name_to_update.name) }}
+                {{ form.name(class="form-control", value=name_to_update[1], placeholder="e.g. Bachelor of Computer Science") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.collg.label(class="form-label") }}
-                {{ form.collg(class="form-control", value=name_to_update.collegeid) }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                {{ form.collg(class="form-control", value=name_to_update[2], placeholder="e.g. CCS, CASS, CON") }}
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('course') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('course') }}">Cancel</a>
+
 {% endblock %}

@@ -1,52 +1,35 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, request
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired
 from flask_mysqldb import MySQL
+import os
+from dotenv import load_dotenv
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, SelectField, FileField
+from wtforms.validators import DataRequired
+from flask_wtf.file import FileAllowed
+from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.uploader import upload as cloudinary_upload
 
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = "localhost"
-app.config['MYSQL_USER'] = "ssis"
-app.config['MYSQL_PASSWORD'] = "1234"
-app.config['MYSQL_DB'] = "ssis"
-app.config['SECRET_KEY'] = 'secret'
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+cloudinary.config(cloud_name=os.getenv('CLOUD_NAME'),
+                    api_key=os.getenv('API_KEY'),
+                    api_secret=os.getenv('API_SECRET'),
+                    )
+
+CLOUDINARY_FOLDER = os.getenv('CLOUDINARY_FOLDER')
 
 mysql = MySQL(app)
-
-#class Colleges(db.Model):
-#    __tablename__ = "Colleges"
-#    id = db.Column(db.String(10), primary_key = True, nullable = False)
-#    name = db.Column(db.String(200), nullable = False)
-#    conn_course = db.relationship('Courses', cascade = "all,delete", backref = "courses")
-
-#    def __repr__(self):
-#        return '<College %r>' % self.id
-    
-#class Courses(db.Model):
-#    __tablename__ = "Courses"
-#    id = db.Column(db.String(10), primary_key = True, nullable = False)
-#    name = db.Column(db.String(200), nullable = False)
-#    #College reference
-#    collegeid = db.Column(db.String(10), db.ForeignKey('Colleges.id'))
-#    conn_student = db.relationship('Students', cascade = "all,delete", backref = "students")
-
-#    def __repr__(self):
-#        return '<Course %r>' % self.id
-    
-#class Students(db.Model):
-#    __tablename__ = "Students"
-#    id = db.Column(db.String(10), primary_key = True, nullable = False)
-#    firstname = db.Column(db.String(200), nullable = False)
-#    lastname = db.Column(db.String(200), nullable = False)
-#    year = db.Column(db.Integer, nullable = False)
-#    gender = db.Column(db.String(200), nullable = False)
-    #Course reference
-#    courseid = db.Column(db.String(10), db.ForeignKey('Courses.id'))
-
-#    def __repr__(self):
-#        return '<Student %r>' % self.id
 
 #Search Form All    
 class SearchAllForm(FlaskForm):
@@ -72,13 +55,18 @@ class CrForm(FlaskForm):
     submit = SubmitField("Submit")
 #Student Form
 class StForm(FlaskForm):
-    id = StringField("Enter ID Number (YYYY-NNNN)", validators=[DataRequired()])
+    id = StringField("Enter ID Number", validators=[DataRequired()])
     firstname = StringField("Enter First Name", validators=[DataRequired()])
     lastname = StringField("Enter Last Name", validators=[DataRequired()])
-    year = StringField("Enter Year Level (only the Integer)", validators=[DataRequired()])
+    year = StringField("Enter Year Level", validators=[DataRequired()])
     gender = StringField("Enter Gender", validators=[DataRequired()])
     course = StringField("Enter Course", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+class ImgForm(FlaskForm):
+    pfp = FileField("Profile Picture", validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
+    submit = SubmitField("Submit")
+
 
 @app.route('/')
 def index():
@@ -300,6 +288,7 @@ def addST():
     curr = mysql.connection.cursor()
 
     if form.validate_on_submit():
+
         stud=curr.execute("SELECT * FROM students WHERE firstname=(%s) AND lastname=(%s) LIMIT 1", [form.firstname.data,form.lastname.data])
         #Students.query.filter_by(firstname=form.firstname.data).first()
         if stud == False:
@@ -376,6 +365,34 @@ def deleteST(id):
         flash("Error! Looks like there was a problem... TwT")
         return render_template("Deleted.html", form=form,) 
     
+@app.route('/students/upload/<string:id>', methods=['GET', 'POST'])
+def uploadIMG(id):
+    uid=id
+    pfp = None
+    curr = mysql.connection.cursor()
+    form = ImgForm()
+    curr = mysql.connection.cursor()
+    image_to_update=curr.execute("SELECT * FROM students WHERE id=(%s)", [uid])
+
+    if request.method == "POST":
+        image = request.files['pfp']
+
+        upload_result = cloudinary_upload(
+            image, folder=CLOUDINARY_FOLDER)
+        secure_url = upload_result['secure_url']
+
+        try:
+            curr.execute("UPDATE students SET profilepic=(%s) WHERE id=(%s)", [secure_url, uid])
+            mysql.connection.commit()
+            curr.close()
+            flash("Student Updated Successfully!")
+            return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
+        except:
+            flash("Error! Looks like there was a problem... TwT")
+            return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
+    else:
+        return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
+
 @app.context_processor
 def base():
 	form = SearchAllForm()

@@ -1,5 +1,9 @@
 {% extends 'SSIS.html' %}
 
-{% block head %}
-<a type="button" class="btn btn-primary" href="{{ url_for('college') }}">Return</a>
+{% block body %}
+<script>
+    window.onload = function() {
+    window.location.href = '/colleges/';
+  };
+</script>
 {% endblock %}

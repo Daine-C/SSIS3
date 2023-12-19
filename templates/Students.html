@@ -1,6 +1,6 @@
 {% extends 'SSIS.html' %}
 
-{% block head %}
+{% block body %}
     {% for message in get_flashed_messages() %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ message }}
@@ -12,6 +12,7 @@
     <div class="shadow p-3 mb-5 bg-body rounded">
         <table class="table table-hover table-bordered mt-2 align-middle align-middle">
             <tr class="table-secondary">
+                <th></th>
                 <th>Student ID Number</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -22,6 +23,11 @@
             </tr>
             {% for stud in studs %}
                 <tr>
+                    {% if stud[6] == None %}
+                    <td><p>No image set</p></td>
+                    {% else %}
+                    <td><img src="{{ stud[6] }}" width="150" height="150"></td>
+                    {% endif %}
                     <td>{{ stud[0] }}</td>
                     <td>{{ stud[1] }}</td>
                     <td>{{ stud[2] }}</td>
@@ -29,7 +35,12 @@
                     <td>{{ stud[3] }}</td>
                     <td>{{ stud[4] }}</td>
                     <td>
-                        <div class="d-grid gap-2 col-6">
+                        <div class="d-grid gap-2 col-12">
+                            {% if stud[6] == NULL %}
+                            <a type="button" class="btn btn-primary btn-sm" href="{{url_for('uploadIMG', id=stud[0])}}">Upload Picture</a>
+                            {% else %}
+                            <a type="button" class="btn btn-primary btn-sm" href="{{url_for('uploadIMG', id=stud[0])}}">Change Picture</a>
+                            {% endif %}
                             <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateST', id=stud[0])}}">Update</a>
                             <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteST', id=stud[0])}}">Delete</a>
                         </div>

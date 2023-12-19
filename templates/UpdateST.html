@@ -1,6 +1,6 @@
 {% extends 'SSIS.html' %}
 
-{% block head %}
+{% block body %}
     {% for message in get_flashed_messages() %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ message }}
@@ -13,7 +13,7 @@
             <form action="/students/update/{{ uid }}" method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update[0]) }}
+                {{ form.id(class="form-control", value=name_to_update[0], placeholder="YYYY-NNNN") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
@@ -33,15 +33,25 @@
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.year.label(class="form-label") }}
-                {{ form.year(class="form-control", value=name_to_update[3]) }}
+                {{ form.year(class="form-control", value=name_to_update[3], placeholder="In Integer Form, e.g. 1, 2, 3, 4") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
                 {{ form.gender(class="form-control", value=name_to_update[4]) }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger mb-2" href="{{ url_for('student') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

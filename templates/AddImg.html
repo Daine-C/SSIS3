@@ -1,0 +1,24 @@
+{% extends 'SSIS.html' %}
+
+{% block body %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <div class="content mb-2">
+            <h1>Student Picture</h1>
+            <form action="/students/upload/{{ uid }}" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ form.pfp.label(class="form-label") }}
+                {{ form.pfp(class="form-control", accept="image/*") }}
+                <br/>
+                {{ form.submit(class="btn btn-success", for="form-group") }}
+                <br/>
+            </form>
+        </div>
+    </div>
+    <a type="button" class="btn btn-danger" href="{{ url_for('student') }}">Cancel</a>
+{% endblock %}
