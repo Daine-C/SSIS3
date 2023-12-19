@@ -24,7 +24,7 @@
             {% for stud in studs %}
                 <tr>
                     {% if stud[6] == None %}
-                    <td><div class="body justify-content-center ps-4 ms-4">No image set</div></td>
+                    <td><div class="body text-secondary justify-content-center ps-4 ms-4">No image set</td>
                     {% else %}
                     <td><div class="body justify-content-center ps-4 ms-1"><img src="{{ stud[6] }}" width="150" height="150"></div></td>
                     {% endif %}
