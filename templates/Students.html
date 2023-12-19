@@ -9,8 +9,8 @@
     {% endfor %}
 <div class="content">
     <h2>Students</h2>
-    <div class="shadow p-3 mb-5 bg-body rounded">
-        <table class="table table-hover table-bordered mt-2 align-middle align-middle">
+    <div class="shadow p-3 bg-body rounded">
+        <table class="table table-hover table-bordered align-middle align-middle">
             <tr class="table-secondary">
                 <th></th>
                 <th>Student ID Number</th>
@@ -24,9 +24,9 @@
             {% for stud in studs %}
                 <tr>
                     {% if stud[6] == None %}
-                    <td><p>No image set</p></td>
+                    <td><div class="body justify-content-center ps-4 ms-4">No image set</div></td>
                     {% else %}
-                    <td><img src="{{ stud[6] }}" width="150" height="150"></td>
+                    <td><div class="body justify-content-center ps-4 ms-1"><img src="{{ stud[6] }}" width="150" height="150"></div></td>
                     {% endif %}
                     <td>{{ stud[0] }}</td>
                     <td>{{ stud[1] }}</td>

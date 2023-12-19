@@ -64,7 +64,7 @@ class StForm(FlaskForm):
     submit = SubmitField("Submit")
 
 class ImgForm(FlaskForm):
-    pfp = FileField("Profile Picture", validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
+    pfp = FileField("Profile Picture", validators=[FileAllowed(['jpg', 'png', 'webp'], 'Images only!')])
     submit = SubmitField("Submit")
 
 
@@ -407,7 +407,7 @@ def search():
   results = None
   curr = mysql.connection.cursor()
 
-  tag = tag+'%'
+  tag = '%'+tag+'%'
 
   if form.validate_on_submit:
       if typ == 'cl':
