@@ -34,7 +34,7 @@ mysql = MySQL(app)
 #Search Form All    
 class SearchAllForm(FlaskForm):
     searched = StringField("Searched", validators=[DataRequired()])
-    typs = SelectField(u'Fields', choices=[('cl', 'Colleges'),('cr', 'Courses'),('st', 'Students')])
+    typs = SelectField(u'Fields', choices=[('al', 'All'),('cl', 'Colleges'),('cr', 'Courses'),('st', 'Students'),('yr', 'Year'),('gen', 'Gender')])
     submit = SubmitField("Submit")
 
 #Search Forms    
@@ -408,7 +408,10 @@ def search():
   results = None
   curr = mysql.connection.cursor()
 
-  tag = '%'+tag+'%'
+  if typ == 'gen':
+    tag = tag+'%'
+  else:
+    tag = '%'+tag+'%'
 
   if form.validate_on_submit:
       if typ == 'cl':
@@ -430,7 +433,26 @@ def search():
 		 form=form,
 		 results = results) 
       elif typ == 'st':
-        stud = curr.execute("SELECT * FROM students WHERE id LIKE (%s) OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR gender LIKE (%s) OR courseid LIKE (%s)", [tag,tag,tag,tag,tag,tag])
+        stud = curr.execute("""SELECT * FROM students CROSS JOIN courses 
+                            ON students.courseid=courses.id WHERE students.id LIKE (%s) OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR courseid LIKE (%s) OR collegeid LIKE (%s)""", [tag,tag,tag,tag,tag,tag])
+        if stud > 0:
+         results = curr.fetchall()
+        else:
+         flash("Sorry, no results...")
+        return render_template("Search.html",
+		 form=form,
+		 results = results) 
+      elif typ == 'yr':
+        stud = curr.execute("SELECT * FROM students WHERE year LIKE (%s)", [tag])
+        if stud > 0:
+         results = curr.fetchall()
+        else:
+         flash("Sorry, no results...")
+        return render_template("Search.html",
+		 form=form,
+		 results = results)          
+      elif typ == 'gen':
+        stud = curr.execute("SELECT * FROM students WHERE gender LIKE (%s)", [tag])
         if stud > 0:
          results = curr.fetchall()
         else:
@@ -439,7 +461,17 @@ def search():
 		 form=form,
 		 results = results) 
       else:
-          return render_template('Search.html')
+        stud = curr.execute("""SELECT * FROM students CROSS JOIN courses 
+                            ON students.courseid=courses.id CROSS JOIN colleges ON courses.collegeid=colleges.id
+                            WHERE students.id LIKE (%s) OR courseid LIKE (%s) OR collegeid LIKE (%s) OR courses.name LIKE (%s) OR colleges.name LIKE (%s)
+                            OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR gender LIKE (%s)""", [tag,tag,tag,tag,tag,tag,tag,tag,tag])
+        if stud > 0:
+         results = curr.fetchall()
+        else:
+         flash("Sorry, no results...")
+        return render_template("Search.html",
+		 form=form,
+		 results = results) 
       
 
 if __name__ == "__main__":
