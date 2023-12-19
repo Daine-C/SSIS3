@@ -14,11 +14,21 @@
                 {{ form.hidden_tag() }}
                 {{ form.pfp.label(class="form-label") }}
                 {{ form.pfp(class="form-control", accept="image/*") }}
-                <br/>
-                {{ form.submit(class="btn btn-success", for="form-group") }}
-                <br/>
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger mb-2" href="{{ url_for('student') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('student') }}">Cancel</a>
+
 {% endblock %}
