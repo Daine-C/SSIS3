@@ -108,7 +108,7 @@ def course():
 def student():
     curr = mysql.connection.cursor()
 
-    stud = curr.execute("SELECT * FROM students CROSS JOIN courses ON students.courseid=courses.id")
+    stud = curr.execute("SELECT * FROM students CROSS JOIN courses ON students.courseid=courses.id ORDER BY students.id")
     if stud > 0:
       studs = curr.fetchall()
     else:
