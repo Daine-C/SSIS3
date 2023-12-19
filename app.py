@@ -401,6 +401,7 @@ def base():
 #Search    
 @app.route('/search', methods=["POST"])
 def search():
+  typ = None
   form = SearchAllForm()
   tag = request.form['searched']
   typ = request.form['typs']
@@ -429,7 +430,7 @@ def search():
 		 form=form,
 		 results = results) 
       elif typ == 'st':
-        stud = curr.execute("SELECT * FROM students WHERE id LIKE (%s) OR firstname LIKE (%s) OR lastname LIKE (%s)", [tag,tag,tag])
+        stud = curr.execute("SELECT * FROM students WHERE id LIKE (%s) OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR gender LIKE (%s) OR courseid LIKE (%s)", [tag,tag,tag,tag,tag,tag])
         if stud > 0:
          results = curr.fetchall()
         else:
