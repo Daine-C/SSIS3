@@ -81,8 +81,12 @@ def deleteCL(id):
 
     try:
         Colleges.delete(uid)
-        flash("College Deleted Successfully!")
-        return render_template("Deleted.html", form=form) 
+        check = Colleges.one_id(uid)
+        if check == None:
+            flash("College Deleted Successfully!")
+        else:
+            flash("College Cannot be Deleted! There are still students.")
+        return render_template("Deleted.html", form=form)  
     except:
         flash("Error! Looks like there was a problem... TwT")
         return render_template("Deleted.html", form=form,) 
