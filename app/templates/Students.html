@@ -1,0 +1,44 @@
+{% extends 'SSIS.html' %}
+
+{% block head %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+<div class="content">
+    <h2>Students</h2>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <table class="table table-hover table-bordered mt-2 align-middle align-middle">
+            <tr class="table-secondary">
+                <th></th>
+                <th>Student ID Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Course</th>
+                <th>Year Level</th>
+                <th>Gender</th>
+                <th></th>
+            </tr>
+            {% for stud in studs %}
+                <tr>
+                    <td><img src="{{ stud[6] }}" width="50" height="50"></td>
+                    <td>{{ stud[0] }}</td>
+                    <td>{{ stud[1] }}</td>
+                    <td>{{ stud[2] }}</td>
+                    <td>{{ stud[5] }}</td>
+                    <td>{{ stud[3] }}</td>
+                    <td>{{ stud[4] }}</td>
+                    <td>
+                        <div class="d-grid gap-2 col-6">
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('student.updateST', id=stud[0])}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('student.deleteST', id=stud[0])}}">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

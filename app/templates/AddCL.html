@@ -9,26 +9,21 @@
     {% endfor %}
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
-            <h1>Edit Course</h1>
-            <form action="/courses/update/{{ uid }}" method ="POST">
+            <h1>Add College</h1>
+            <form method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update.id) }}
+                {{ form.id(class="form-control") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control", value=name_to_update.name) }}
-                <br/>
-                <br/>
-                {{ form.hidden_tag() }}
-                {{ form.collg.label(class="form-label") }}
-                {{ form.collg(class="form-control", value=name_to_update.collegeid) }}
+                {{ form.name(class="form-control") }}
                 <br/>
                 {{ form.submit(class="btn btn-success") }}
                 <br/>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('course') }}">Cancel</a>
+    <a type="button" class="btn btn-danger" href="{{ url_for('college.college') }}">Cancel</a>
 {% endblock %}

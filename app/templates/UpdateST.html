@@ -13,37 +13,37 @@
             <form action="/students/update/{{ uid }}" method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update[0]) }}
+                {{ form.id(class="form-control", value=name_to_update[0][0]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.firstname.label(class="form-label") }}
-                {{ form.firstname(class="form-control", value=name_to_update[1]) }}
+                {{ form.firstname(class="form-control", value=name_to_update[0][1]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.lastname.label(class="form-label") }}
-                {{ form.lastname(class="form-control", value=name_to_update[2]) }}
+                {{ form.lastname(class="form-control", value=name_to_update[0][2]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.course.label(class="form-label") }}
-                {{ form.course(class="form-control", value=name_to_update[5]) }}
+                {{ form.course(class="form-control", value=name_to_update[0][5]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.year.label(class="form-label") }}
-                {{ form.year(class="form-control", value=name_to_update[3]) }}
+                {{ form.year(class="form-control", value=name_to_update[0][3]) }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
-                {{ form.gender(class="form-control", value=name_to_update[4]) }}
+                {{ form.gender(class="form-control", value=name_to_update[0][4]) }}
                 <br/>
                 {{ form.submit(class="btn btn-success") }}
                 <br/>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('student') }}">Cancel</a>
+    <a type="button" class="btn btn-danger" href="{{ url_for('student.student') }}">Cancel</a>
 {% endblock %}

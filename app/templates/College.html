@@ -8,30 +8,22 @@
         </div>
     {% endfor %}
 <div class="content">
-    <h2>Students</h2>
+    <h2>Colleges</h2>
     <div class="shadow p-3 mb-5 bg-body rounded">
         <table class="table table-hover table-bordered mt-2 align-middle align-middle">
             <tr class="table-secondary">
-                <th>Student ID Number</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Course</th>
-                <th>Year Level</th>
-                <th>Gender</th>
+                <th>College Code</th>
+                <th>College Name</th>
                 <th></th>
             </tr>
-            {% for stud in studs %}
+            {% for colg in colgs %}
                 <tr>
-                    <td>{{ stud[0] }}</td>
-                    <td>{{ stud[1] }}</td>
-                    <td>{{ stud[2] }}</td>
-                    <td>{{ stud[5] }}</td>
-                    <td>{{ stud[3] }}</td>
-                    <td>{{ stud[4] }}</td>
+                    <td>{{ colg[0] }}</td>
+                    <td>{{ colg[1] }}</td>
                     <td>
                         <div class="d-grid gap-2 col-6">
-                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('updateST', id=stud[0])}}">Update</a>
-                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('deleteST', id=stud[0])}}">Delete</a>
+                            <a type="button" class="btn btn-warning btn-sm" href="{{url_for('college.updateCL', id=colg[0])}}">Update</a>
+                            <a type="button" class="btn btn-danger btn-sm" href="{{url_for('college.deleteCL', id=colg[0])}}">Delete</a>
                         </div>
                     </td>
                 </tr>
