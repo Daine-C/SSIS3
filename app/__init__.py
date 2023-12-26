@@ -42,23 +42,23 @@ def create_app():
         @app.route('/')
         def index():
             return render_template("Home.html")
-            
+        
         @app.route('/students/upload/<string:id>', methods=['GET', 'POST'])
         def uploadIMG(id):
             uid=id
             pfp = None
             form = ImgForm()
-            image_to_update=Students.one(uid)
+            image_to_update=Students.one_id(uid)
 
             if request.method == "POST":
                 image = request.files['pfp']
 
                 upload_result = cloudinary_upload(
-                    image, folder=CLOUDINARY_FOLDER)
+                        image, folder=CLOUDINARY_FOLDER)
                 secure_url = upload_result['secure_url']
 
                 try:
-                    Students.profile_pic(secure_url, uid)
+                    Students.profile_pic(secure_url=secure_url, id=uid)
                     flash("Student Updated Successfully!")
                     return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
                 except:

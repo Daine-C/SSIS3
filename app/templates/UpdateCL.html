@@ -19,11 +19,20 @@
                 {{ form.hidden_tag() }}
                 {{ form.name.label(class="form-label") }}
                 {{ form.name(class="form-control", value=name_to_update[0][1]) }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('college.college') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('college.college') }}">Cancel</a>
 {% endblock %}

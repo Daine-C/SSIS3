@@ -31,7 +31,12 @@
                     <td>{{ stud[3] }}</td>
                     <td>{{ stud[4] }}</td>
                     <td>
-                        <div class="d-grid gap-2 col-6">
+                        <div class="d-grid gap-2 col-12">
+                            {% if stud[6] == None %}
+                            <a type="button" class="btn btn-primary btn-sm" href="{{url_for('uploadIMG', id=stud[0])}}">Upload Picture</a>
+                            {% else %}
+                            <a type="button" class="btn btn-primary btn-sm" href="{{url_for('uploadIMG', id=stud[0])}}">Change Picture</a>
+                            {% endif %}
                             <a type="button" class="btn btn-warning btn-sm" href="{{url_for('student.updateST', id=stud[0])}}">Update</a>
                             <a type="button" class="btn btn-danger btn-sm" href="{{url_for('student.deleteST', id=stud[0])}}">Delete</a>
                         </div>

@@ -9,21 +9,11 @@
     {% endfor %}
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
-            <h1>Edit Course</h1>
-            <form action="/courses/update/{{ uid }}" method ="POST">
+            <h1>Student Picture</h1>
+            <form action="/students/upload/{{ uid }}" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
-                {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", value=name_to_update[0][0]) }}
-                <br/>
-                <br/>
-                {{ form.hidden_tag() }}
-                {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control", value=name_to_update[0][1]) }}
-                <br/>
-                <br/>
-                {{ form.hidden_tag() }}
-                {{ form.collg.label(class="form-label") }}
-                {{ form.collg(class="form-control", value=name_to_update[0][2]) }}
+                {{ form.pfp.label(class="form-label") }}
+                {{ form.pfp(class="form-control", accept="image/*") }}
                 <div class="row container-fluid">
                     <div class="col-8">
                         <br/>
@@ -33,7 +23,7 @@
                     <div class="col-4">
                         <div class="float-end">
                             <br/>
-                            <a type="button" class="btn btn-danger" href="{{ url_for('course.course') }}">Cancel</a>
+                            <a type="button" class="btn btn-danger mb-2" href="{{ url_for('student.student') }}">Cancel</a>
                         </div>
                     </div>
                 </div>

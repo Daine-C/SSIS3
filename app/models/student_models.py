@@ -59,7 +59,7 @@ class Students(object):
         current_app.mysql.commit()
 
     @classmethod
-    def profile_pic(cls, id, secure_url):
+    def profile_pic(cls, secure_url, id):
         cursor = current_app.mysql.cursor()
 
         sql = "UPDATE students SET profilepic=(%s) WHERE id=(%s)"

@@ -13,7 +13,7 @@
             <form method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control") }}
+                {{ form.id(class="form-control", placeholder="YYYY-NNNN") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
@@ -33,17 +33,27 @@
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.year.label(class="form-label") }}
-                {{ form.year(class="form-control") }}
+                {{ form.year(class="form-control", placeholder="In Integer Form, e.g. 1, 2, 3, 4") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
                 {{ form.gender(class="form-control") }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('student.student') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('student.student') }}">Cancel</a>
+
 {% endblock %}

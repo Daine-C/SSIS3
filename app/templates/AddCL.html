@@ -13,17 +13,27 @@
             <form method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control") }}
+                {{ form.id(class="form-control", placeholder="e.g. CCS, CASS, CON") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control") }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                {{ form.name(class="form-control", placeholder="e.g. College of Computer Studies") }}
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('college.college') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('college.college') }}">Cancel</a>
+
 {% endblock %}

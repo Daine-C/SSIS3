@@ -13,22 +13,32 @@
             <form method ="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control") }}
+                {{ form.id(class="form-control", placeholder="e.g. BSCS, BSIS, BSIT") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control") }}
+                {{ form.name(class="form-control", placeholder="e.g. Bachelors of Computer Science") }}
                 <br/>
                 <br/>
                 {{ form.hidden_tag() }}
                 {{ form.collg.label(class="form-label") }}
-                {{ form.collg(class="form-control") }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                {{ form.collg(class="form-control", placeholder="e.g. CCS, CASS, CON") }}
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('course.course') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('course.course') }}">Cancel</a>
+
 {% endblock %}

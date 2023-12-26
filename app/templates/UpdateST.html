@@ -39,9 +39,19 @@
                 {{ form.hidden_tag() }}
                 {{ form.gender.label(class="form-label") }}
                 {{ form.gender(class="form-control", value=name_to_update[0][4]) }}
-                <br/>
-                {{ form.submit(class="btn btn-success") }}
-                <br/>
+                <div class="row container-fluid">
+                    <div class="col-8">
+                        <br/>
+                        {{ form.submit(class="btn btn-success") }}
+                        <br/>
+                    </div>
+                    <div class="col-4">
+                        <div class="float-end">
+                            <br/>
+                            <a type="button" class="btn btn-danger" href="{{ url_for('student.student') }}">Cancel</a>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
