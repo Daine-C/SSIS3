@@ -9,28 +9,64 @@
 <div class="shadow p-3 mb-5 bg-body rounded">
     <table class="table table-hover table-bordered mt-2 align-middle align-middle">
       <tr class="table-secondary">
-        <th>ID</th>
-        <th>Name</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        {% if results[0][11] %}
+          <th></th>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Course</th>
+          <th>College</th>
+          <th></th>
+        {% elif results[0][2] == results[0][3] %}
+          <th>ID</th>
+          <th>Course Name</th>
+          <th>College</th>
+          <th></th>
+        {% else %}
+          <th>ID</th>
+          <th>College Name</th>
+          <th>Courses</th>
+          <th></th>
+        {% endif %}
+
     </tr>
      {% for result in results %}
        <tr>
-         <td>{{ result[0] }}</td>
+         {% if result[11] %}
+          <td><img src="{{ result[6] }}" width="100" height="100"></td>
+          <td>{{ result[0] }}</td>
+         {% else %}
+          <td>{{ result[0] }}</td>
+         {% endif %}
          {% if result[11] %}
           <td>{{ result[1] }}</td>
           <td>{{ result[2] }}</td>
           <td>{{ result[8] }} ({{ result[5] }})</td>
           <td>{{ result[11] }} ({{ result[9] }})</td>
+          <td>
+            <div class="d-grid gap-2 col-12">
+              <a type="button" class="btn btn-warning btn-sm" href="{{url_for('student.updateST', id=result[0])}}">Update</a>
+              <a type="button" class="btn btn-danger btn-sm" href="{{url_for('student.deleteST', id=result[0])}}">Delete</a>
+            </div>
+          </td>
          {% elif result[2] == result[3] %}
           <td>{{ result[1] }}</td>
           <td>{{ result[4] }} ({{ result[2] }})</td>
-          <td></td>
+          <td>
+            <div class="d-grid gap-2 col-6">
+              <a type="button" class="btn btn-warning btn-sm" href="{{url_for('course.updateCR', id=result[0])}}">Update</a>
+              <a type="button" class="btn btn-danger btn-sm" href="{{url_for('course.deleteCR', id=result[0])}}">Delete</a>
+            </div>
+          </td>
          {% else %}
           <td>{{ result[1] }}</td>
           <td>{{ result[3] }} ({{ result[2] }})</td>
-          <td></td>
+          <td>
+            <div class="d-grid gap-2 col-6">
+              <a type="button" class="btn btn-warning btn-sm" href="{{url_for('college.updateCL', id=result[0])}}">Update</a>
+              <a type="button" class="btn btn-danger btn-sm" href="{{url_for('college.deleteCL', id=result[0])}}">Delete</a>
+            </div>
+          </td>
          {% endif %}
        </tr>
      {% endfor %}

@@ -80,7 +80,9 @@ class Students(object):
     @classmethod
     def search_year(cls, tag):
         cursor = current_app.mysql.cursor()
-        sql = "SELECT * FROM students WHERE year LIKE (%s)"
+        sql = """SELECT * FROM students CROSS JOIN courses 
+                    ON students.courseid=courses.id CROSS JOIN colleges ON courses.collegeid=colleges.id
+                    WHERE year LIKE (%s)"""
         cursor.execute(sql, (tag,))
         result = cursor.fetchall()
         return result
@@ -88,7 +90,9 @@ class Students(object):
     @classmethod
     def search_gender(cls, tag):
         cursor = current_app.mysql.cursor()
-        sql = "SELECT * FROM students WHERE gender LIKE (%s)"
+        sql = """SELECT * FROM students CROSS JOIN courses 
+                    ON students.courseid=courses.id CROSS JOIN colleges ON courses.collegeid=colleges.id
+                    WHERE gender LIKE (%s)"""
         cursor.execute(sql, (tag,))
         result = cursor.fetchall()
         return result
