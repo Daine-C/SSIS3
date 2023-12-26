@@ -10,6 +10,20 @@
     <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="content mb-2">
             <h1>Edit Student</h1>
+            <br/>
+            <div class="d-flex flex-row mb-3">
+                <div class="p-2">
+                    {% if name_to_update[0][6] == None %}
+                        <div class="body text-secondary justify-content-center ps-4 ms-4">No image set</div>
+                    {% else %}
+                        <img src="{{ name_to_update[0][6] }}" width="150" height="150">
+                    {% endif %}
+                </div>
+                <div class="pt-4 mt-5">                
+                    <a type="button" class="btn btn-warning mt-5" href="{{url_for('uploadIMG', id=name_to_update[0][0])}}">Upload Profile Picture</a>
+                </div> 
+            </div>
+            <br/>
             <form action="/students/update/{{ uid }}" method="POST">
                 {{ form.hidden_tag() }}
                 {{ form.id.label(class="form-label") }}
@@ -55,5 +69,5 @@
             </form>
         </div>
     </div>
-    <a type="button" class="btn btn-danger" href="{{ url_for('student.student') }}">Cancel</a>
+
 {% endblock %}

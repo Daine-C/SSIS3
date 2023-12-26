@@ -51,18 +51,31 @@ def create_app():
             image_to_update=Students.one_id(uid)
 
             if request.method == "POST":
-                image = request.files['pfp']
 
-                upload_result = cloudinary_upload(
-                        image, folder=CLOUDINARY_FOLDER)
-                secure_url = upload_result['secure_url']
+                if form.validate_on_submit():
+                    image = request.files['pfp']
 
-                try:
-                    Students.profile_pic(secure_url=secure_url, id=uid)
-                    flash("Student Updated Successfully!")
-                    return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
-                except:
-                    flash("Error! Looks like there was a problem... TwT")
+                    upload_result = cloudinary_upload(
+                            image, folder=CLOUDINARY_FOLDER)
+                    secure_url = upload_result['secure_url']
+
+                    try:
+                        Students.profile_pic(secure_url=secure_url, id=uid)
+                        flash("Student Updated Successfully!")
+                        return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
+                    except:
+                        flash("Error! Looks like there was a problem... TwT")
+                        return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
+                else:
+                    image = request.files['pfp']
+
+                    filename = image.filename
+                    
+                    if filename.find('.jpg') > -1 or  filename.find('.png') > -1 or filename.find('.webp') > -1:
+                        flash("Error! The file size must be under 1mb!")
+                    else:
+                        flash("Error! That's an unacceptable file type!")
+                        
                     return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)
             else:
                 return render_template("AddImg.html", form=form, image_to_update=image_to_update, uid=uid)

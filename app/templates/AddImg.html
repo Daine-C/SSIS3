@@ -1,6 +1,6 @@
 {% extends 'SSIS.html' %}
 
-{% block head %}
+{% block body %}
     {% for message in get_flashed_messages() %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{ message }}
@@ -23,7 +23,7 @@
                     <div class="col-4">
                         <div class="float-end">
                             <br/>
-                            <a type="button" class="btn btn-danger mb-2" href="{{ url_for('student.student') }}">Cancel</a>
+                            <a type="button" class="btn btn-danger mb-2" href="{{url_for('student.updateST', id=uid)}}">Cancel</a>
                         </div>
                     </div>
                 </div>
