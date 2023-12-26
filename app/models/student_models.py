@@ -98,8 +98,8 @@ class Students(object):
         cursor = current_app.mysql.cursor()
         sql = """SELECT * FROM students CROSS JOIN courses 
                     ON students.courseid=courses.id CROSS JOIN colleges ON courses.collegeid=colleges.id
-                    WHERE students.id LIKE (%s) OR courseid LIKE (%s) OR collegeid LIKE (%s) OR courses.name LIKE (%s) 
-                    OR colleges.name LIKE (%s) OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR gender LIKE (%s)"""
+                    WHERE students.id LIKE (%s) OR courseid LIKE (%s) OR collegeid LIKE (%s) OR courses.name LIKE (%s) OR colleges.name LIKE (%s)
+                    OR firstname LIKE (%s) OR lastname LIKE (%s) OR year LIKE (%s) OR gender LIKE (%s)"""
         cursor.execute(sql, (tag,tag,tag,tag,tag,tag,tag,tag,tag,))
         result = cursor.fetchall()
         return result
