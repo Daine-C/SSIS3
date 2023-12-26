@@ -19,7 +19,7 @@ class Courses(object):
     def all(cls):
         cursor = current_app.mysql.cursor()
 
-        sql = "SELECT * from courses"
+        sql = "SELECT * from courses CROSS JOIN colleges ON courses.collegeid=colleges.id ORDER BY courses.id"
         cursor.execute(sql)
         result = cursor.fetchall()
         return result
@@ -57,8 +57,9 @@ class Courses(object):
     @classmethod
     def search(cls, tag):
             cursor = current_app.mysql.cursor()
-            sql = "SELECT * FROM courses WHERE id LIKE (%s) OR name LIKE (%s)"
-            cursor.execute(sql, (tag,tag,))
+            sql = """SELECT * FROM courses CROSS JOIN colleges ON courses.collegeid=colleges.id
+                WHERE courses.id LIKE (%s) OR collegeid LIKE (%s) OR courses.name LIKE (%s) OR colleges.name LIKE (%s)"""
+            cursor.execute(sql, (tag,tag,tag,tag,))
             result = cursor.fetchall()
             return result
 

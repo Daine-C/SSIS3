@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS `courses` (
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
+  FOREIGN KEY (`collegeid`) REFERENCES `colleges` (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`collegeid`) REFERENCES `colleges` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `students` (
@@ -43,6 +45,8 @@ CREATE TABLE IF NOT EXISTS `students` (
   `courseid` varchar(10) NOT NULL,
   `profilepic` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  FOREIGN KEY (`courseid`) REFERENCES `courses` (`id`)
+  FOREIGN KEY (`courseid`) REFERENCES `courses` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;

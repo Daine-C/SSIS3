@@ -58,8 +58,9 @@ class Colleges(object):
     @classmethod
     def search(cls, tag):
             cursor = current_app.mysql.cursor()
-            sql = "SELECT * FROM colleges WHERE id LIKE (%s) OR name LIKE (%s)"
-            cursor.execute(sql, (tag,tag,))
+            sql = """SELECT * FROM colleges CROSS JOIN courses ON courses.collegeid=colleges.id
+                WHERE courses.id LIKE (%s) OR collegeid LIKE (%s) OR courses.name LIKE (%s) OR colleges.name LIKE (%s)"""
+            cursor.execute(sql, (tag,tag,tag,tag,))
             result = cursor.fetchall()
             return result
 

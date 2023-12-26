@@ -61,9 +61,12 @@ def updateCL(id):
 
             uid=up_id
             name_to_update=Colleges.one_id(uid)
-
-            flash("College Updated Successfully!")
-            return render_template("UpdateCL.html", form=form, name_to_update=name_to_update, uid=uid)
+            check = Colleges.one_id(uid)
+            if check == None:
+                flash("College Deleted Successfully!")
+            else:
+                flash("College Cannot be Deleted! There are still students.")
+            return render_template("Deleted.html", form=form) 
         except:
             flash("Error! Looks like there was a problem... TwT")
             return render_template("UpdateCL.html", form=form, name_to_update=name_to_update, uid=uid)

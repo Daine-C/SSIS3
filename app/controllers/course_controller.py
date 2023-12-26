@@ -78,7 +78,11 @@ def deleteCR(id):
 
     try:
         Courses.delete(id=uid)
-        flash("Course Deleted Successfully!")
+        check = Courses.one_id(uid)
+        if check == None:
+            flash("Course Deleted Successfully!")
+        else:
+            flash("Course Cannot be Deleted! There are still students.")
         return render_template("Deleted.html", form=form) 
     except:
         flash("Error! Looks like there was a problem... TwT")

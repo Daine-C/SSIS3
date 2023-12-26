@@ -16,6 +16,7 @@
                 <th>Student ID Number</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>College</th>
                 <th>Course</th>
                 <th>Year Level</th>
                 <th>Gender</th>
@@ -26,12 +27,13 @@
                     {% if stud[6] == None %}
                     <td><div class="body text-secondary justify-content-center ps-4 ms-4">No image set</td>
                     {% else %}
-                    <td><div class="body justify-content-center ps-4 ms-1"><img src="{{ stud[6] }}" width="150" height="150"></div></td>
+                    <td><div class="body justify-content-center ps-4 ms-1"><img src="{{ stud[6] }}" width="100" height="100"></div></td>
                     {% endif %}
                     <td>{{ stud[0] }}</td>
                     <td>{{ stud[1] }}</td>
                     <td>{{ stud[2] }}</td>
-                    <td>{{ stud[5] }}</td>
+                    <td>{{ stud[11] }} ({{ stud[9] }})</td>
+                    <td>{{ stud[8] }} ({{ stud[5] }})</td>
                     <td>{{ stud[3] }}</td>
                     <td>{{ stud[4] }}</td>
                     <td>
